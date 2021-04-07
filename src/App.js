@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+
+import HeaderComponent from "./components/HeaderComponent";
+
+import "./App.css";
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  const pushItem = (item) => {
+    const itemValue = item.target.innerText;
+    const existingItem = items.filter((i) => i === itemValue).length > 0;
+    let newItems = [];
+
+    if (existingItem) {
+      newItems = items.filter((i) => i !== itemValue);
+    } else {
+      newItems = [...items, itemValue];
+    }
+
+    setItems(newItems);
+  };
+
+  const renderItems = items.map((item, i) => <li key={i}>{item}</li>);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <HeaderComponent
+        onItemClick={() => pushItem}
+        items={["home", "item1", "item2"]}
+      />
+      <ul className="item-list">{renderItems}</ul>
+    </>
   );
 }
 
